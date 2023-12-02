@@ -7,7 +7,7 @@ import { showBooks } from '../pages/books';
 import { getBookDetails, deleteAuthorBooksRelationship } from '../api/mergedData';
 import viewBook from '../pages/viewBook';
 
-const domEvents = () => {
+const domEvents = (user) => {
   document.querySelector('#main-container').addEventListener('click', (e) => {
     // TODO: CLICK EVENT FOR DELETING A BOOK
     if (e.target.id.includes('delete-book')) {
@@ -16,7 +16,7 @@ const domEvents = () => {
         const [, firebaseKey] = e.target.id.split('--');
 
         deleteBook(firebaseKey).then(() => {
-          getBooks().then(showBooks);
+          getBooks(user.uid).then(showBooks);
         });
       }
     }
@@ -48,7 +48,7 @@ const domEvents = () => {
         const [, firebaseKey] = e.target.id.split('--');
 
         deleteAuthorBooksRelationship(firebaseKey).then(() => {
-          getAuthors().then(showAuthors);
+          getAuthors(user.uid).then(showAuthors);
         });
       }
     }
@@ -61,7 +61,7 @@ const domEvents = () => {
     if (e.target.id.includes('edit-author-btn')) {
       const [, firebaseKey] = e.target.id.split('--');
 
-      getSingleAuthor(firebaseKey).then(showAuthors);
+      getSingleAuthor(firebaseKey).then((authObj) => addAuthorForm(authObj));
     }
   });
 };
